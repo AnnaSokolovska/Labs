@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <title></title>
+</head>
+<body style="background-color: #d3d1d1;">
+    <div class="container">
+        <h2>Єдиний реєстр нотаріусів</h2>
+        @{
+            string id = "";
+            string token = (string)Session["access_token"];
+            if (token != String.Empty && token != null)
+            {
+                id = "(" + Session["user_id"] + ", " + Session["last_name"] + " " + Session["first_name"] + ")";
+            }
+
+        }
+        @if (token != String.Empty && token != null)
+        {
+            <a href="~/Web/Second" class="navbar-brand"> Реєстр заповітів</a>
+        }
+        @Html.ActionLink("Vkontakte" + id, "VK", "Web", null, new { @class = "navbar-brand" })
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 api-viewer" route="~/api">
+                <p>
+                    <h3>Нотаріуси</h3>
+                    <table class="table table-bordered table-hover api-table" address="/notary"></table>
+                </p>
+                <p>
+                    <h3>Адміністративний Округ</h3>
+                    <table class="table table-bordered table-hover api-table" address="/district"></table>
+                </p>
+                <p>
+                    <h3>Нотаріальні контори</h3>
+                    <table class="table table-bordered table-hover api-table" address="/office"></table>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.11.2.min.js"></script>
+    <script src="~/Scripts/view.js"></script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="notarysModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="district">
+          <Key>
+            <PropertyRef Name="idDistrict" />
+          </Key>
+          <Property Name="idDistrict" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Region" Type="varchar" MaxLength="45" />
+          <Property Name="City" Type="varchar" MaxLength="45" />
+          <Property Name="Area" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="furlought">
+          <Key>
+            <PropertyRef Name="idFurlought" />
+          </Key>
+          <Property Name="idFurlought" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="45" />
+          <Property Name="From" Type="date" />
+          <Property Name="To" Type="date" />
+          <Property Name="Notary_idNotary" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="license">
+          <Key>
+            <PropertyRef Name="idLicense" />
+            <PropertyRef Name="Notary_idNotary" />
+          </Key>
+          <Property Name="idLicense" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nomber" Type="int" />
+          <Property Name="From" Type="date" />
+          <Property Name="To" Type="date" />
+          <Property Name="IssueDate" Type="date" />
+          <Property Name="Notary_idNotary" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="notary">
+          <Key>
+            <PropertyRef Name="idNotary" />
+          </Key>
+          <Property Name="idNotary" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="45" />
+          <Property Name="Name" Type="varchar" MaxLength="45" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="45" />
+          <Property Name="Certificate" Type="int" />
+          <Property Name="Suspension" Type="date" />
+          <Property Name="Phone" Type="varchar" MaxLength="45" />
+          <Property Name="Address" Type="varchar" MaxLength="45" />
+          <Property Name="Office_idOffice" Type="int" />
+          <Property Name="District_idDistrict" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="office">
+          <Key>
+            <PropertyRef Name="idOffice" />
+          </Key>
+          <Property Name="idOffice" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Office_Title" Type="varchar" MaxLength="45" />
+          <Property Name="Foundation" Type="date" />
+          <Property Name="Status" Type="date" />
+          <Property Name="Phone" Type="varchar" MaxLength="45" />
+          <Property Name="Address" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="idOrder" />
+          </Key>
+          <Property Name="idOrder" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="45" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Notary_idNotary" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_Furlought_Notary1">
+          <End Role="notary" Type="Self.notary" Multiplicity="1" />
+          <End Role="furlought" Type="Self.furlought" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="furlought">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_License_Notary1">
+          <End Role="notary" Type="Self.notary" Multiplicity="1" />
+          <End Role="license" Type="Self.license" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="license">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Notary_District1">
+          <End Role="district" Type="Self.district" Multiplicity="1" />
+          <End Role="notary" Type="Self.notary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="district">
+              <PropertyRef Name="idDistrict" />
+            </Principal>
+            <Dependent Role="notary">
+              <PropertyRef Name="District_idDistrict" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Notary_Office">
+          <End Role="office" Type="Self.office" Multiplicity="0..1" />
+          <End Role="notary" Type="Self.notary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="office">
+              <PropertyRef Name="idOffice" />
+            </Principal>
+            <Dependent Role="notary">
+              <PropertyRef Name="Office_idOffice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Order_Notary1">
+          <End Role="notary" Type="Self.notary" Multiplicity="1" />
+          <End Role="order" Type="Self.order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="notarysModelStoreContainer">
+          <EntitySet Name="district" EntityType="Self.district" Schema="notarys" store:Type="Tables" />
+          <EntitySet Name="furlought" EntityType="Self.furlought" Schema="notarys" store:Type="Tables" />
+          <EntitySet Name="license" EntityType="Self.license" Schema="notarys" store:Type="Tables" />
+          <EntitySet Name="notary" EntityType="Self.notary" Schema="notarys" store:Type="Tables" />
+          <EntitySet Name="office" EntityType="Self.office" Schema="notarys" store:Type="Tables" />
+          <EntitySet Name="order" EntityType="Self.order" Schema="notarys" store:Type="Tables" />
+          <AssociationSet Name="fk_Furlought_Notary1" Association="Self.fk_Furlought_Notary1">
+            <End Role="notary" EntitySet="notary" />
+            <End Role="furlought" EntitySet="furlought" />
+          </AssociationSet>
+          <AssociationSet Name="fk_License_Notary1" Association="Self.fk_License_Notary1">
+            <End Role="notary" EntitySet="notary" />
+            <End Role="license" EntitySet="license" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Notary_District1" Association="Self.fk_Notary_District1">
+            <End Role="district" EntitySet="district" />
+            <End Role="notary" EntitySet="notary" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Notary_Office" Association="Self.fk_Notary_Office">
+            <End Role="office" EntitySet="office" />
+            <End Role="notary" EntitySet="notary" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Order_Notary1" Association="Self.fk_Order_Notary1">
+            <End Role="notary" EntitySet="notary" />
+            <End Role="order" EntitySet="order" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="notarysModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="district">
+          <Key>
+            <PropertyRef Name="idDistrict" />
+          </Key>
+          <Property Name="idDistrict" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Region" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="notaries" Relationship="Self.fk_Notary_District1" FromRole="district" ToRole="notary" />
+        </EntityType>
+        <EntityType Name="furlought">
+          <Key>
+            <PropertyRef Name="idFurlought" />
+          </Key>
+          <Property Name="idFurlought" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="From" Type="DateTime" />
+          <Property Name="To" Type="DateTime" />
+          <Property Name="Notary_idNotary" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="notary" Relationship="notarysModel.fk_Furlought_Notary1" FromRole="furlought" ToRole="notary" />
+        </EntityType>
+        <EntityType Name="license">
+          <Key>
+            <PropertyRef Name="idLicense" />
+            <PropertyRef Name="Notary_idNotary" />
+          </Key>
+          <Property Name="idLicense" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nomber" Type="Int32" />
+          <Property Name="From" Type="DateTime" />
+          <Property Name="To" Type="DateTime" />
+          <Property Name="IssueDate" Type="DateTime" />
+          <Property Name="Notary_idNotary" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="notary" Relationship="notarysModel.fk_License_Notary1" FromRole="license" ToRole="notary" />
+        </EntityType>
+        <EntityType Name="notary">
+          <Key>
+            <PropertyRef Name="idNotary" />
+          </Key>
+          <Property Name="idNotary" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Surname" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Certificate" Type="Int32" />
+          <Property Name="Suspension" Type="DateTime" />
+          <Property Name="Phone" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Office_idOffice" Type="Int32" />
+          <Property Name="District_idDistrict" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="district" Relationship="Self.fk_Notary_District1" FromRole="notary" ToRole="district" />
+          <NavigationProperty Name="office" Relationship="Self.fk_Notary_Office" FromRole="notary" ToRole="office" />
+          <NavigationProperty Name="furloughts" Relationship="notarysModel.fk_Furlought_Notary1" FromRole="notary" ToRole="furlought" />
+          <NavigationProperty Name="licenses" Relationship="notarysModel.fk_License_Notary1" FromRole="notary" ToRole="license" />
+          <NavigationProperty Name="orders" Relationship="notarysModel.fk_Order_Notary1" FromRole="notary" ToRole="order" />
+        </EntityType>
+        <EntityType Name="office">
+          <Key>
+            <PropertyRef Name="idOffice" />
+          </Key>
+          <Property Name="idOffice" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Office_Title" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Foundation" Type="DateTime" />
+          <Property Name="Status" Type="DateTime" />
+          <Property Name="Phone" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="notaries" Relationship="Self.fk_Notary_Office" FromRole="office" ToRole="notary" />
+        </EntityType>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="idOrder" />
+          </Key>
+          <Property Name="idOrder" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" />
+          <Property Name="Notary_idNotary" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="notary" Relationship="notarysModel.fk_Order_Notary1" FromRole="order" ToRole="notary" />
+        </EntityType>
+        <Association Name="fk_Notary_District1">
+          <End Role="district" Type="Self.district" Multiplicity="1" />
+          <End Role="notary" Type="Self.notary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="district">
+              <PropertyRef Name="idDistrict" />
+            </Principal>
+            <Dependent Role="notary">
+              <PropertyRef Name="District_idDistrict" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Notary_Office">
+          <End Role="office" Type="Self.office" Multiplicity="0..1" />
+          <End Role="notary" Type="Self.notary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="office">
+              <PropertyRef Name="idOffice" />
+            </Principal>
+            <Dependent Role="notary">
+              <PropertyRef Name="Office_idOffice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="notarysEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="districts" EntityType="Self.district" />
+          <EntitySet Name="furloughts" EntityType="Self.furlought" />
+          <EntitySet Name="licenses" EntityType="Self.license" />
+          <EntitySet Name="notaries" EntityType="Self.notary" />
+          <EntitySet Name="offices" EntityType="Self.office" />
+          <EntitySet Name="orders" EntityType="Self.order" />
+          <AssociationSet Name="fk_Notary_District1" Association="Self.fk_Notary_District1">
+            <End Role="district" EntitySet="districts" />
+            <End Role="notary" EntitySet="notaries" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Notary_Office" Association="Self.fk_Notary_Office">
+            <End Role="office" EntitySet="offices" />
+            <End Role="notary" EntitySet="notaries" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Furlought_Notary1" Association="notarysModel.fk_Furlought_Notary1">
+            <End Role="notary" EntitySet="notaries" />
+            <End Role="furlought" EntitySet="furloughts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_License_Notary1" Association="notarysModel.fk_License_Notary1">
+            <End Role="notary" EntitySet="notaries" />
+            <End Role="license" EntitySet="licenses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Order_Notary1" Association="notarysModel.fk_Order_Notary1">
+            <End Role="notary" EntitySet="notaries" />
+            <End Role="order" EntitySet="orders" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="fk_Furlought_Notary1">
+          <End Type="notarysModel.notary" Role="notary" Multiplicity="1" />
+          <End Type="notarysModel.furlought" Role="furlought" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="furlought">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_License_Notary1">
+          <End Type="notarysModel.notary" Role="notary" Multiplicity="1" />
+          <End Type="notarysModel.license" Role="license" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="license">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Order_Notary1">
+          <End Type="notarysModel.notary" Role="notary" Multiplicity="1" />
+          <End Type="notarysModel.order" Role="order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notary">
+              <PropertyRef Name="idNotary" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="Notary_idNotary" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="notarysModelStoreContainer" CdmEntityContainer="notarysEntities">
+          <EntitySetMapping Name="districts">
+            <EntityTypeMapping TypeName="notarysModel.district">
+              <MappingFragment StoreEntitySet="district">
+                <ScalarProperty Name="idDistrict" ColumnName="idDistrict" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="furloughts">
+            <EntityTypeMapping TypeName="notarysModel.furlought">
+              <MappingFragment StoreEntitySet="furlought">
+                <ScalarProperty Name="idFurlought" ColumnName="idFurlought" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="Notary_idNotary" ColumnName="Notary_idNotary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="licenses">
+            <EntityTypeMapping TypeName="notarysModel.license">
+              <MappingFragment StoreEntitySet="license">
+                <ScalarProperty Name="idLicense" ColumnName="idLicense" />
+                <ScalarProperty Name="Nomber" ColumnName="Nomber" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="Notary_idNotary" ColumnName="Notary_idNotary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notaries">
+            <EntityTypeMapping TypeName="notarysModel.notary">
+              <MappingFragment StoreEntitySet="notary">
+                <ScalarProperty Name="idNotary" ColumnName="idNotary" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="Certificate" ColumnName="Certificate" />
+                <ScalarProperty Name="Suspension" ColumnName="Suspension" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Office_idOffice" ColumnName="Office_idOffice" />
+                <ScalarProperty Name="District_idDistrict" ColumnName="District_idDistrict" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="offices">
+            <EntityTypeMapping TypeName="notarysModel.office">
+              <MappingFragment StoreEntitySet="office">
+                <ScalarProperty Name="idOffice" ColumnName="idOffice" />
+                <ScalarProperty Name="Office_Title" ColumnName="Office_Title" />
+                <ScalarProperty Name="Foundation" ColumnName="Foundation" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="notarysModel.order">
+              <MappingFragment StoreEntitySet="order">
+                <ScalarProperty Name="idOrder" ColumnName="idOrder" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Notary_idNotary" ColumnName="Notary_idNotary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

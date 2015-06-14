@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+</head>
+<body>
+    <h2>Реєстр заповітів</h2>
+    <a href="~/Web/Index"> Реєстр нотаріусів</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 api-viewer" route="http://localhost:1393/api">
+                <p>
+                    Заповіти
+                    <table class="table table-bordered table-hover api-table" address="/devise">                   
+                    </table>
+                </p>
+                <p>
+                    Реєстрації заповітів
+                    <table class="table table-bordered table-hover api-table" address="/deviseActions">
+                    </table>
+                </p>
+                <p>
+                    Заповідачі
+                    <table class="table table-bordered table-hover api-table" address="/testator">
+                    </table>
+                </p>
+                <p>
+                    Реєстратори
+                    <table class="table table-bordered table-hover api-table" address="/registrator">
+                    </table>
+                </p>
+                <p>
+                    Дублікати
+                    <table class="table table-bordered table-hover api-table" address="/dublicate">
+                    </table>
+                </p>
+            </div>
+        </div>
+    </div>
+        <script src="~/Scripts/jquery-1.11.2.min.js"></script>
+    <script src="~/Scripts/view.js"></script>
+</body>
+</html>
